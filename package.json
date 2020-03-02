@@ -1,0 +1,29 @@
+{
+  "name": "voiceviet-mozilla",
+  "version": "1.0.0",
+  "description": "VoiceMozilla counterpart adaptation by Dream Team",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dannguyen99/voice.mozilla_by_DreamTeam.git"
+  },
+  "author": "DreamTeam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dannguyen99/voice.mozilla_by_DreamTeam/issues"
+  },
+  "homepage": "https://github.com/dannguyen99/voice.mozilla_by_DreamTeam#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1"
+  }
+}
