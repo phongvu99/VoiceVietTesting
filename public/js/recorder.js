@@ -15,7 +15,7 @@ const init = async () => {
                 mediaStream: stream
             });
             recorder = new WebAudioRecorder(sourceNode, {
-                workerDir: "js/lib/"
+                workerDir: "/js/lib/"
             });
             recorder.setEncoding('mp3');
             registerEvent(recorder);
@@ -80,6 +80,9 @@ const uploadFile = async () => {
             body: formData
         });
         const resData = await res.json();
+        if (res.status === 201) {
+            alert('Uploaded succeed!');
+        }
         console.log(resData);
     } catch (err) {
         console.log(err);
