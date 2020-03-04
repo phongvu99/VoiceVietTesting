@@ -1,4 +1,4 @@
-let recorder;
+let recorder, _blob;
 
 const init = async () => {
     // const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -10,7 +10,6 @@ const init = async () => {
     };
     if (navigator.mediaDevices.getUserMedia) {
         try {
-            console.log('testing');
             const stream = await getMedia(constraints);
             const sourceNode = new MediaStreamAudioSourceNode(audioCtx, {
                 mediaStream: stream
@@ -18,11 +17,14 @@ const init = async () => {
             recorder = new WebAudioRecorder(sourceNode, {
                 workerDir: "js/lib/"
             });
+            recorder.setEncoding('mp3');
             registerEvent(recorder);
             console.log('Audio recorder object', recorder);
             console.log('Successfully initialized Audio recorder!');
+            alert('Successfully initialized Audio recorder!');
         } catch (err) {
             console.log(err);
+            alert(`Error: ${err.message}. Please check console for detailed logs!`);
         }
     }
 };
@@ -36,6 +38,7 @@ const registerEvent = (recorder) => {
     }
     recorder.onComplete = (recorder, blob) => {
         console.log(blob);
+        _blob = blob;
         //cross browser
         window.URL = window.URL || window.webkitURL;
         const blobURL = window.URL.createObjectURL(blob);
@@ -46,29 +49,73 @@ const registerEvent = (recorder) => {
 const createAudioElement = (blobUrl) => {
     const downloadEl = document.createElement('a');
     downloadEl.style = 'display: block';
-    downloadEl.innerHTML = 'download';
-    downloadEl.download = 'audio.webm';
+    downloadEl.innerHTML = 'Download';
+    downloadEl.download = `recording-${new Date().toISOString().replace(/[-T:\.Z]/g, "")}.mp3`;
     downloadEl.href = blobUrl;
     const audioEl = document.createElement('audio');
+    audioEl.className = 'recording';
     audioEl.controls = true;
     const sourceEl = document.createElement('source');
     sourceEl.src = blobUrl;
-    sourceEl.type = 'audio/webm';
+    sourceEl.type = 'audio/mpeg';
     audioEl.appendChild(sourceEl);
     document.body.appendChild(audioEl);
     document.body.appendChild(downloadEl);
 };
 
-const record = () => {
-    if (!recorder.isRecording()) {
-        recorder.startRecording();
+const uploadFile = async () => {
+    console.log('Blob', _blob);
+    const fileName = `recording-${new Date().toISOString().replace(/[-T:\.Z]/g, "")}.mp3`;
+    const file = new File([_blob], fileName, {
+        lastModified: Date.now(),
+        type: 'audio/mpeg'
+    });
+    console.log(file);
+    const formData = new FormData();
+    formData.append('fileName', fileName);
+    formData.append('fileData', file, 'audio.mp3');
+    try {
+        const res = await fetch('http://localhost:8080/recorder', {
+            method: 'POST',
+            body: formData
+        });
+        const resData = await res.json();
+        console.log(resData);
+    } catch (err) {
+        console.log(err);
+        throw err;
     }
-    console.log('Recording');
+}
+
+const downloadFile = async () => {
+    // Implement later    
+}
+
+const checkInit = recorder => {
+    if (recorder === undefined) {
+        return false;
+    }
+    return true;
+}
+
+const record = () => {
+    if (!checkInit(recorder)) {
+        return alert('Audio recorder is uninitialized!');
+    }
+    if (!recorder.isRecording()) {
+        alert('Recording...');
+        recorder.startRecording();
+        console.log('Recording');
+    }
 };
 
 const stopRecord = async () => {
+    if (!checkInit(recorder)) {
+        return alert('Audio recorder is uninitialized!');
+    }
     if (recorder.isRecording()) {
-        recorder.finishRecording()
+        recorder.finishRecording();
+        alert('Recording exported!');
     }
 };
 
