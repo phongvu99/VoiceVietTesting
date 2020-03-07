@@ -10,9 +10,11 @@ const bodyParser = require('body-parser');
 const recorder = require('./routes/recorder');
 const auth = require('./routes/auth');
 
+// Controllers
+const errorsController = require('./controllers/errors');
+
 // Util
 const rootDir = require('./util/path');
-const drive = require('./util/drive').initDrive;
 
 const app = express();
 
@@ -68,15 +70,15 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(drive);
-
 app.use(auth);
 app.use(recorder);
+
+app.use(errorsController.request_404);
 
 app.use((err, req, res, next) => {
     console.log('Express error handling', err);
     const status = err.status || 500;
-    const data = err.data || null;
+    const data = err.data || '';
     const message = err.message;
     res.status(status).json({
         status: status,

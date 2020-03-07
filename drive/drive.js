@@ -1,4 +1,4 @@
-const getDrive = require('../util/drive').getDrive;
+const getDrive = require('../middleware/drive').getDrive;
 const rootDir = require('../util/path');
 
 const fs = require('fs');
@@ -37,10 +37,9 @@ const downloadFile = async (fileID, cb) => {
 }
 
 const uploadFile = async (fileName, fileData, cb) => {
+    // path without parameter "." start from VoiceMozilla directory
     // const pathTest = path.join('public', 'js');
     // console.log(pathTest);
-    // console.log('fileName', fileName);
-    // console.log('fileData', fileData);
     const fileStream = fs.createReadStream(path.join(rootDir, fileData.path));
     const folderID = '1dyQQ6uTwqpFxSkBYOkkZFdtaoSoqGKzZ';
     const auth = getDrive();

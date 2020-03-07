@@ -2,8 +2,14 @@ const router = require('express').Router();
 
 const authController = require('../controllers/auth');
 
-router.get('/user/:userID', authController.getUser);
+const isAuth = require('../middleware/is-auth');
 
-router.post('/signup', authController.signup);
+router.get('/user/:userID', isAuth, authController.getUser);
+
+router.get('/auth/identity', isAuth, authController.getIdentity);
+
+router.post('/signin', authController.signIn);
+
+router.post('/signup', authController.signUp);
 
 module.exports = router;

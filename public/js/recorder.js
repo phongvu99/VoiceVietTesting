@@ -64,29 +64,31 @@ const createAudioElement = (blobUrl) => {
 };
 
 const uploadFile = async () => {
-    console.log('Blob', _blob);
-    const fileName = `recording-${new Date().toISOString().replace(/[-T:\.Z]/g, "")}.mp3`;
-    const file = new File([_blob], fileName, {
-        lastModified: Date.now(),
-        type: 'audio/mpeg'
-    });
-    console.log(file);
-    const formData = new FormData();
-    formData.append('fileName', fileName);
-    formData.append('fileData', file, 'audio.mp3');
-    try {
-        const res = await fetch('http://localhost:8080/recorder', {
-            method: 'POST',
-            body: formData
+    if (!recorder.isRecording()) {
+        console.log('Blob', _blob);
+        const fileName = `recording-${new Date().toISOString().replace(/[-T:\.Z]/g, "")}.mp3`;
+        const file = new File([_blob], fileName, {
+            lastModified: Date.now(),
+            type: 'audio/mpeg'
         });
-        const resData = await res.json();
-        if (res.status === 201) {
-            alert('Uploaded succeed!');
+        console.log(file);
+        const formData = new FormData();
+        formData.append('fileName', fileName);
+        formData.append('fileData', file, 'audio.mp3');
+        try {
+            const res = await fetch('http://localhost:8080/recorder', {
+                method: 'POST',
+                body: formData
+            });
+            const resData = await res.json();
+            if (res.status === 201) {
+                alert('Uploaded succeed!');
+            }
+            console.log(resData);
+        } catch (err) {
+            console.log(err);
+            throw err;
         }
-        console.log(resData);
-    } catch (err) {
-        console.log(err);
-        throw err;
     }
 }
 
