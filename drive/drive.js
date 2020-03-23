@@ -48,7 +48,7 @@ const uploadFile = async (fileName, fileData, cb) => {
         auth
     });
     const fileMetadata = {
-        'name': fileName,
+        name: fileName,
         parents: [folderID]
     };
     const media = {

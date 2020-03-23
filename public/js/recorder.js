@@ -47,6 +47,7 @@ const registerEvent = (recorder) => {
 };
 
 const createAudioElement = (blobUrl) => {
+    const sourceTest = '/temp-20200323144727306.mp3'
     const downloadEl = document.createElement('a');
     downloadEl.style = 'display: block';
     downloadEl.innerHTML = 'Download';
@@ -74,7 +75,7 @@ const uploadFile = async () => {
         console.log(file);
         const formData = new FormData();
         formData.append('fileName', fileName);
-        formData.append('fileData', file, 'audio.mp3');
+        formData.append('fileData', file);
         try {
             const res = await fetch('http://localhost:8080/recorder', {
                 method: 'POST',
@@ -90,10 +91,6 @@ const uploadFile = async () => {
             throw err;
         }
     }
-}
-
-const downloadFile = async () => {
-    // Implement later    
 }
 
 const checkInit = recorder => {
@@ -114,7 +111,7 @@ const record = () => {
     }
 };
 
-const stopRecord = async () => {
+const stopRecord = () => {
     if (!checkInit(recorder)) {
         return alert('Audio recorder is uninitialized!');
     }
@@ -124,9 +121,18 @@ const stopRecord = async () => {
     }
 };
 
+const cancelRecord = () => {
+    if (!checkInit(recorder)) {
+        return alert('Audio recorder is uninitialized!');
+    }
+    if (recorder.isRecording()) {
+        recorder.cancelRecording();
+        alert('Recording cancelled!');
+    }
+}
+
 const getMedia = async (constraints) => {
     let stream = null;
-
     try {
         stream = await navigator.mediaDevices.getUserMedia(constraints);
         return stream;

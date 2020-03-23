@@ -18,7 +18,7 @@ const SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly',
 const TOKEN_PATH = path.join(rootDir, 'util', 'token.json');
 const CREDS_PATH = path.join(rootDir, 'util', 'credentials.json');
 
-let _driveClient = undefined;
+let _driveClient;
 
 const initDrive = (req, res, next) => {
     if (!_driveClient) {

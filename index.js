@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 // Routes
 const recorder = require('./routes/recorder');
 const auth = require('./routes/auth');
+const quote = require('./routes/quote');
 
 // Controllers
 const errorsController = require('./controllers/errors');
@@ -59,6 +60,7 @@ app.set('views', 'views'); // Explicitly set
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.static(path.join(rootDir, 'public')));
+app.use(express.static(path.join(rootDir, 'tmp')));
 
 // CORS headers
 app.use((req, res, next) => {
@@ -72,6 +74,7 @@ app.use((req, res, next) => {
 
 app.use(auth);
 app.use(recorder);
+app.use(quote);
 
 app.use(errorsController.request_404);
 

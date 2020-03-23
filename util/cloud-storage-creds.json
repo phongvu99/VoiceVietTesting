@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "voiceviet-api",
+  "private_key_id": "351edcf4a03b6961a5253f191692b7769b486cb5",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCox7xPjL4Cjcdn\nZiL+D7WB2QgjhqwBKO7UxQPTYTsMvFTZldJNsYlxU/LP1s+DsXHuxbYoYPqdAnas\nQjmsIlGwZA9F/ibcgtGQPDkFHBUXj7PsHlI9uoPU++0WZJuPqEwwGHpSGeI2rdUc\n3gfaLI6Y6gePe4uTAyYXUaZjoIOYGbGSvyk4z4F0mRSy80eACdPiNRp6OIxOz6C4\n0pcPZg58JfXKpIHKWWUzcLcTQUt4fhhB7RrIIVP1QgHdVrpwmw0/QGAPvbtSSV2p\n49y0iU52T4xvoz7bIF580PwdU1qm0NVUJSA5w/XvMBhCc+KE/kVXcilUtH63LU0S\nQbK6S0LPAgMBAAECggEAAUduNdKwSjfzQ0CwiVbGIv6ysSmoUQiBTkIvGHPE9kms\ngYHlynNdL+tQJ/V7j8/aXK2AdNCX5Zlq9zzKGPPqe9juRPxNkl/LITDCf9wOaAFf\n2eQmXGYbg4FSF2rZ58vc6syssA67cVbHLwUtJnxS9Jog2K6VNh8QxecuJEJr7N9a\nY907+UyLxlNzQTqH5nlruWrh7D/Mhpjn/rbCdWRoCMjE2fYzYVw57JcpbhKXFdTV\n0DBIe6R7L3jJOH28dsqn+KfsZXp4gpwcgNRNNdfPcltM/NUdaV2fcVwzdcKY1NKB\nVa/QuoFG2IXr4NM95BgfHlQQuHQGH8+CMw+m6Usu4QKBgQDbFPir2WXhF/MchNZ8\nZgWh9F3n1e6/+nlt1nH7CpaLnaSOOlx32xCs8SxdvpAtVCfEN/bmp35UoiXYJ2AU\nyiwe/OVykHa8UjdzdYLOg/YFjtemCvmNu55Gkwx04YX2ZGrDn4VojQygh1R/MOpM\nwtb/FbEQ+6ZURWhWZtfRKmdSrwKBgQDFOMlohCW7TjW9zdTuOVSwTONbS5abfN9M\n9q41N26kdb9WUvOVqrWqsY/tVNQpTTXHmbBYBvStGJVFStftNhMUdp5HYqCU68s9\nClKHSQyQNZ4Djvz/QyGBoNRXrxbCxxEfC59kmA7kQTUxE3a7nm7QWkEgCI3i9Evv\nfaalZD+Z4QKBgEI3NHG8Y26FLpWQEMPIkitBEKDhqCeeLNVl201lBdts6i+StCAF\ntiSPQDmVPz50ERDdWWKdfTFXUNjkDcY61NsI1NCrmTeSIfBjtAV3HQTRB5zH9GVC\nL7Rk/X7WKwctkpdNv6S5/PcH8CIBRs+slA7FH59icANIdyCmNNSjXFdBAoGAbsUj\nUmGOc7JMuutFoftvVooI1HkTAQfUv3x5ggg9S3+a1NhIWZKE8HdEWE9hzkTAZPgs\nNHTLrgD1rfKIboIFm2O4KG37tUjuYL1Qdw2PUdvbgTIpZRGGWzFCsnDzvrhiJGa5\nwp0pGAiL4KGG+X/Vy441r9E+J++ASuXu2EwC8OECgYEAs2nd24YV5qR3i6r2nZRf\nVJTlAdNU4Yp/IJclurazHqWOPJdP1bCo18vEOqgov6le+uL2eIPkzm3p+ryNw4eK\nplKFwWAgxOw0m5T9me0HhkQRJJLXezjPISFmHiMLH79qg/7mHzuxmA39QsHhKRZn\nRX46k3osJj0/cds/Ux1DtNU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "cloud-storage-uploader@voiceviet-api.iam.gserviceaccount.com",
+  "client_id": "107144022745618856962",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloud-storage-uploader%40voiceviet-api.iam.gserviceaccount.com"
+}

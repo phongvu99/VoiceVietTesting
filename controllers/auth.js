@@ -31,7 +31,7 @@ const getUser = async (req, res, next) => {
         return next(err);
     }
     try {
-        const user = await User.findById(userID).select('-password -email');
+        const user = await User.findById(userID).select('-password -email -recordings');
         if (!user) {
             const err = new Error('No user found!');
             err.status = 404;
@@ -103,7 +103,7 @@ const signUp = async (req, res, next) => {
                 user: userDoc._doc
             });
         } else {
-            const err = new Error('Email taken!');
+            const err = new Error('Email is already taken!');
             err.status = 422;
             throw err;
         }

@@ -1,11 +1,16 @@
 const drive = require('../drive/drive');
+const cloudStorage = require('../cloud-storage/cloud');
+const getStorage = require('../middleware/cloudStorage').getStorage;
+const fs = require('fs');
+const path = require('path');
+const rootDir = require('../util/path');
 
 const User = require('../models/User');
 const Recording = require('../models/Recording');
 
+const bucketName = 'voiceviet-recording';
+
 const getRecorder = async (req, res, next) => {
-    // const pathTest = path.join('./');
-    // console.log(pathTest);
     res.render('./recorder.ejs');
 }
 
@@ -29,59 +34,85 @@ const getRecordings = async (req, res, next) => {
                 createdAt: -1
             })
             .skip((currentPage - 1) * perPage)
-            .limit(perPage).populate('creator', 
+            .limit(perPage).populate('creator',
                 '-_id firstName lastName'
             );
         res.status(200).json({
-            'message': 'All recordings',
-            'recordings': recordings,
-            'totalItems': totalItems
+            message: 'All recordings',
+            recordings: recordings,
+            totalItems: totalItems
         });
     } catch (err) {
         next(err);
     }
-
-
 }
 
-const createRecording = (req, res, next) => {
+const createRecording = async (req, res, next) => {
     if (!req.file) {
         const err = new Error('No recording file!');
         err.status = 422;
         return next(err);
     }
-    const fileName = req.body.fileName;
-    const fileData = req.file;
-    // console.log(fileData);
-    // console.log('fileData', fileData);
-    drive.uploadFile(fileName, fileData, async data => {
-        // const user = await User.findById(req.userID);
-        try {
-            const recording = new Recording({
-                title: fileName,
-                driveID: data[0],
-                creator: '5e63b94b8e7ab243a848edd9'
-            });
-            const user = await User.findById('5e63b94b8e7ab243a848edd9');
-            if (!user) {
-                const err = new Error('No user found!');
-                err.status = 404;
-                throw err;
-            }
-            user.recordings.push(recording);
-            await user.save();
-            const recDoc = await recording.save();
-            res.status(201).json({
-                message: 'Uploaded!',
-                file_id: data[0],
-                file_name: data[1],
-                recording: recDoc._doc
-            });
-        } catch (err) {
-            next(err);
-        }
-    });
+    try {
+        let file = {
+            fileName: req.body.fileName,
+            fileData: req.file
+        };
+        const data = await cloudStorage.uploadFile(file);
+        console.log('Data', data);
+        file = data[0];
+        // const recording = new Recording({
+        //     title: fileName,
+        //     driveID: data[0],
+        //     creator: '5e71f57d498bc60e40d18f1b'
+        // });
+        // const user = await User.findById('5e71f57d498bc60e40d18f1b');
+        // if (!user) {
+        //     const err = new Error('No user found!');
+        //     err.status = 404;
+        //     throw err;
+        // }
+        // user.recordings.push(recording);
+        // await user.save();
+        // const recDoc = await recording.save();
+        res.status(201).json({
+            message: 'Uploaded!',
+            file_id: file.id,
+            file_name: file.name,
+            recording: 'lorem ipsum 4 now'
+        });
+    } catch (err) {
+        next(err);
+    }
+}
 
+const downloadRecording = async (req, res, next) => {
+    const bufs = [];
+    const fileName = `temp-${new Date().toISOString().replace(/[-T:\.Z]/g, "")}.mp3`;
+    const localFile = path.join(rootDir, 'tmp', fileName);
+    try {
+        const remoteFile = getStorage().bucket(bucketName).file('20200318161921629-recording-20200318161921619.mp3');
+        remoteFile.createReadStream()
+            .on('error', function (err) {})
+            .on('response', function (response) {
+                // Server connected and responded with the specified status and headers.
+                console.log(response);
+            })
+            .on('data', function(chunk) {
+                // console.log('Data', chunk);
+                bufs.push(chunk);
+            })
+            .on('end', function () {
+                // The file is fully downloaded.
+                res.status(200).json({
+                    message: 'Downloaded!',
+                    path: `/${fileName}`
+                });
+            })
+            .pipe(fs.createWriteStream(localFile));
+    } catch (err) {
+        next(err);
+    }
 }
 
 const getRecording = async (req, res, next) => {
@@ -112,5 +143,6 @@ module.exports = {
     getRecorder: getRecorder,
     getRecordings: getRecordings,
     getRecording: getRecording,
-    createRecording: createRecording
+    createRecording: createRecording,
+    downloadRecording: downloadRecording
 };

@@ -8,17 +8,15 @@ module.exports = (req, res, next) => {
         err.status = 401;
         throw err;
     }
-    let dcToken;
     const token = authHeader.split(' ')[1];
     jwt.verify(token, Buffer.from(process.env.PRIVATE_KEY, 'base64'), (err, decoded) => {
         if (err) {
             err.status = 500;
+            console.log('JWT verify failed!');
             throw err;
         }
-        console.log('Which one come first?');
+        console.log('Decoded Token', decoded);
         req.userID = decoded.userID
-        dcToken = decoded;
         next();
     });
-    console.log('Decoded Token', dcToken);
 }
