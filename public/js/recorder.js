@@ -76,6 +76,7 @@ const uploadFile = async () => {
         const formData = new FormData();
         formData.append('fileName', fileName);
         formData.append('fileData', file);
+        formData.append('quoteID', '5e78e47fafff581d80d23e87');
         try {
             const res = await fetch('http://localhost:8080/recorder', {
                 method: 'POST',

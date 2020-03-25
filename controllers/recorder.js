@@ -29,18 +29,21 @@ const getRecordings = async (req, res, next) => {
     console.log('Per Page', perPage);
     console.log('Current Page', currentPage);
     try {
-        const totalItems = await Recording.estimatedDocumentCount();
-        const recordings = await Recording.find().sort({
+        const recordings = await Recording.find({
+                creator: {
+                    $ne: req.userID
+                }
+            }).sort({
                 createdAt: -1
             })
             .skip((currentPage - 1) * perPage)
-            .limit(perPage).populate('creator',
-                '-_id firstName lastName'
+            .limit(perPage).populate('creator quote',
+                '-_id firstName lastName message'
             );
         res.status(200).json({
             message: 'All recordings',
-            recordings: recordings,
-            totalItems: totalItems
+            recordings: [...recordings],
+            totalItems: recordings.length
         });
     } catch (err) {
         next(err);
@@ -54,6 +57,7 @@ const createRecording = async (req, res, next) => {
         err.status = 422;
         return next(err);
     }
+    console.log('Req body', req.body);
     try {
         let file = {
             fileName: req.body.fileName,
@@ -66,7 +70,8 @@ const createRecording = async (req, res, next) => {
             title: file.name,
             cloudID: `${file.id.split('.')[0]}`,
             creator: '5e71f57d498bc60e40d18f1b',
-            mediaURL: `${cloudStorageURL}${file.name}`
+            mediaURL: `${cloudStorageURL}${file.name}`,
+            quote: req.body.quoteID
         });
         const user = await User.findById('5e71f57d498bc60e40d18f1b');
         if (!user) {
@@ -100,7 +105,7 @@ const downloadRecording = async (req, res, next) => {
                 // Server connected and responded with the specified status and headers.
                 console.log(response);
             })
-            .on('data', function(chunk) {
+            .on('data', function (chunk) {
                 // console.log('Data', chunk);
                 bufs.push(chunk);
             })
@@ -125,7 +130,12 @@ const getRecording = async (req, res, next) => {
         return next(err);
     }
     try {
-        const recording = await Recording.findById(recID);
+        const recording = await Recording.findOne({
+            _id: recID,
+            creator: {
+                $ne: req.userID
+            }
+        }).populate('quote', '-_id message');
         if (!recording) {
             const err = new Error('The requested resource was not found.');
             err.status = 404;

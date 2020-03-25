@@ -19,6 +19,11 @@ const recordingSchema = new Schema({
     mediaURL: {
         type: String,
         required: true
+    },
+    quote: {
+        type: Schema.Types.ObjectId,
+        ref: 'Quote',
+        required: true
     }
 }, {
     timestamps: true
