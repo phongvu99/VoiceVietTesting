@@ -7,13 +7,17 @@ const recordingSchema = new Schema({
         type: String,
         required: true
     },
-    driveID: {
+    cloudID: {
         type: String,
         required: true
     },
     creator: {
         type: Schema.Types.ObjectId,
         ref: 'User',
+        required: true
+    },
+    mediaURL: {
+        type: String,
         required: true
     }
 }, {

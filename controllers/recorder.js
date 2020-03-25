@@ -48,6 +48,7 @@ const getRecordings = async (req, res, next) => {
 }
 
 const createRecording = async (req, res, next) => {
+    const cloudStorageURL = 'https://storage.cloud.google.com/voiceviet-recording/';
     if (!req.file) {
         const err = new Error('No recording file!');
         err.status = 422;
@@ -61,25 +62,26 @@ const createRecording = async (req, res, next) => {
         const data = await cloudStorage.uploadFile(file);
         console.log('Data', data);
         file = data[0];
-        // const recording = new Recording({
-        //     title: fileName,
-        //     driveID: data[0],
-        //     creator: '5e71f57d498bc60e40d18f1b'
-        // });
-        // const user = await User.findById('5e71f57d498bc60e40d18f1b');
-        // if (!user) {
-        //     const err = new Error('No user found!');
-        //     err.status = 404;
-        //     throw err;
-        // }
-        // user.recordings.push(recording);
-        // await user.save();
-        // const recDoc = await recording.save();
+        const recording = new Recording({
+            title: file.name,
+            cloudID: `${file.id.split('.')[0]}`,
+            creator: '5e71f57d498bc60e40d18f1b',
+            mediaURL: `${cloudStorageURL}${file.name}`
+        });
+        const user = await User.findById('5e71f57d498bc60e40d18f1b');
+        if (!user) {
+            const err = new Error('No user found!');
+            err.status = 404;
+            throw err;
+        }
+        user.recordings.push(recording);
+        await user.save();
+        const recDoc = await recording.save();
         res.status(201).json({
             message: 'Uploaded!',
-            file_id: file.id,
-            file_name: file.name,
-            recording: 'lorem ipsum 4 now'
+            cloudID: `${file.id.split('.')[0]}`,
+            fileName: file.name,
+            recording: recDoc
         });
     } catch (err) {
         next(err);
@@ -116,6 +118,7 @@ const downloadRecording = async (req, res, next) => {
 }
 
 const getRecording = async (req, res, next) => {
+    const cloudStorageURL = 'https://storage.cloud.google.com/voiceviet-recording/';
     const recID = req.params.recID;
     if (!recID) {
         const err = new Error('Missing recordingID parameter!')
@@ -131,7 +134,7 @@ const getRecording = async (req, res, next) => {
         }
         res.status(200).json({
             message: 'Recording found!',
-            recording: recording
+            recording: recordings
         });
     } catch (err) {
         next(err);

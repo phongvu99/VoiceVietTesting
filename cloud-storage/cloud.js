@@ -10,7 +10,7 @@ const uploadFile = async (file) => {
             metadata: {
                 cacheControl: 'public, max-age=31536000'
             },
-            destinations: `./recording/${file.fileName}`
+            destinations: `${file.fileName}`
         });
         // console.log('File uploaded', data[0]);
         // console.log('API response', data[1]);
