@@ -16,6 +16,6 @@ router.get('/testing', initStorage, recorderController.downloadRecording);
 
 router.get('/recorder', recorderController.getRecorder);
 
-router.post('/recorder', initStorage, recorderController.createRecording);
+router.post('/recorder', isAuth, initStorage, recorderController.createRecording);
 
 module.exports = router;
