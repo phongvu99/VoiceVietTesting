@@ -29,6 +29,7 @@ const getRecordings = async (req, res, next) => {
     console.log('Per Page', perPage);
     console.log('Current Page', currentPage);
     try {
+        const totalItems = await Recording.estimatedDocumentCount();
         const recordings = await Recording.find({
                 creator: {
                     $ne: req.userID
@@ -42,8 +43,8 @@ const getRecordings = async (req, res, next) => {
             );
         res.status(200).json({
             message: 'All recordings',
-            recordings: [...recordings],
-            totalItems: recordings.length
+            recordings: recordings,
+            totalItems: totalItems
         });
     } catch (err) {
         next(err);
@@ -73,7 +74,12 @@ const createRecording = async (req, res, next) => {
             mediaURL: `${cloudStorageURL}${file.name}`,
             quote: req.body.quoteID
         });
-        const user = await User.findById('5e71f57d498bc60e40d18f1b');
+        let user;
+        if (req.userID) {
+            user = await User.findById(req.userID);
+        } else {
+            user = await User.findById('5e71f57d498bc60e40d18f1b');
+        }
         if (!user) {
             const err = new Error('No user found!');
             err.status = 404;

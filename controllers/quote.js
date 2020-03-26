@@ -13,6 +13,14 @@ const createQuote = async (req, res, next) => {
         next(err);
     }
     try {
+        const quoteDoc = await Quote.findOne({
+            message: message
+        });
+        if (quoteDoc) {
+            const err = new Error('Quote already exists!');
+            err.status = 422;
+            throw err;
+        }
         const quote = new Quote({
             message: message
         });
@@ -22,7 +30,7 @@ const createQuote = async (req, res, next) => {
             quote: quote._doc
         });
     } catch (err) {
-
+        next(err);
     }
 };
 

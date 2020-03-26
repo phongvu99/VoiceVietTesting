@@ -67,7 +67,8 @@ const createAudioElement = (blobUrl) => {
 const uploadFile = async () => {
     if (!recorder.isRecording()) {
         console.log('Blob', _blob);
-        const fileName = `recording-${new Date().toISOString().replace(/[-T:\.Z]/g, "")}.mp3`;
+        // const fileName = `recording-${new Date().toISOString().replace(/[-T:\.Z]/g, "")}.mp3`;
+        const fileName = 'audio.mp3'
         const file = new File([_blob], fileName, {
             lastModified: Date.now(),
             type: 'audio/mpeg'
