@@ -29,7 +29,11 @@ const getRecordings = async (req, res, next) => {
     console.log('Per Page', perPage);
     console.log('Current Page', currentPage);
     try {
-        const totalItems = await Recording.estimatedDocumentCount();
+        const totalItems = await Recording.countDocuments({
+            creator: {
+                $ne: req.userID
+            }
+        });
         const recordings = await Recording.find({
                 creator: {
                     $ne: req.userID
