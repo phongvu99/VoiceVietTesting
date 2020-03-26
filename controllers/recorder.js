@@ -74,7 +74,7 @@ const createRecording = async (req, res, next) => {
         const recording = new Recording({
             title: file.name,
             cloudID: `${file.id.split('.')[0]}`,
-            creator: '5e71f57d498bc60e40d18f1b',
+            creator: req.userID || '5e71f57d498bc60e40d18f1b',
             mediaURL: `${cloudStorageURL}${file.name}`,
             quote: req.body.quoteID
         });
